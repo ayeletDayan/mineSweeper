@@ -1,0 +1,71 @@
+* {
+  margin: auto;
+  padding: 10px;
+  text-align: center;
+  border-radius: 10px;
+  background-color: black;
+  font-family: 'Times New Roman', Times, serif;
+}
+
+.cell{
+  background-color: rgba(231, 238, 234, 0.897);
+  color: black;
+  font-size: 10px;
+  width: 10px;
+  height: 10px;
+  text-align: center;
+  border: 2px solid rgba(190, 64, 75, 0.699);  
+  }
+
+.button{
+  
+  text-align: center;
+  margin-top: 15px;     
+  font-size: xx-large;  
+  }
+
+.time{
+
+  background-color: rgba(231, 238, 234, 0.897);
+  color: black;
+  text-align: center;
+  margin-top: 15px;   
+  font-size: large;
+  padding: 2px;
+  border: 2px outset grey;
+  } 
+
+
+.button-small{
+  background-color: rgba(231, 238, 234, 0.897);
+  color: black;
+  text-align: center;     
+  font-size: small;
+
+  }     
+
+.clickedNum{
+box-sizing: 15px;
+background-color: plum;
+color: black;
+font-size: 30px;
+text-align: center;  
+}
+
+.life{
+  font-size: x-large;
+}
+
+/* .victory{
+  font-size: xx-large;
+  display: none;
+}
+.game-over{
+  display: none;
+  background-image: cover;
+} */
+/* .formLine {
+  margin:10px;
+  padding:10px;
+  background-color: cornflowerblue;
+} */
