@@ -12,10 +12,12 @@
 <body onload="initGame()">
     <button onclick="level(4,2)" class="button-small">Beginner</button>
     <button onclick="level(8,12)" class="button-small">Medium</button>
-    <button onclick="level(12,30)" class="button-small">Expert</button> <br>
-    <button onclick="start()" class="button">😃</button>
-    <span class="time">00:00</span>
-    <div class='life'></div>
+    <button onclick="level(12,30)" class="button-small">Expert</button>
+    <button onclick="start()" class="button">😃</button><span class="time">00:00</span><span
+        class="bestScore">00:00</span>
+    <div> <span class="life"></span><button onclick="hint()" class="hint"></button> <button onclick="safeClick()"
+            class="safe-Click">3 Safe Click</button> <button onclick="undo()" class="undo">Undo</button> <button
+            onclick="sevenBoom()" class="sevenBoom">7 Boom</button> </div>
     <table>
         <tbody class="board"></tbody>
     </table>
@@ -23,4 +25,5 @@
     <script src="mineSweeper.js"></script>
 </body>
 <footer style="color: white;">Ayelet Dayan</footer>
+
 </html>
