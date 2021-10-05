@@ -17,10 +17,12 @@ function buildBoard() { //Builds the board Set mines at random locations Call se
     }
   }
   for (var i = 0; i < gMines; i++) {
-    var idxI = getRandomInt(0, gSize)
-    var idxJ = getRandomInt(0, gSize)
-    gBoard[idxI][idxJ].in = MINE
+    var idxI = getRandomInt(0, gSize - 1)
+    var idxJ = getRandomInt(0, gSize - 1)
+    if (gBoard[idxI][idxJ].in === MINE) i--
+    else gBoard[idxI][idxJ].in = MINE      
   }
+  
   for (var i = 0; i < gSize; i++) {
     for (var j = 0; j < gSize; j++) {
       if (gBoard[i][j].in !== MINE) {
@@ -77,7 +79,7 @@ function renderLife() {
 }
 
 function renderStart(isWin) {
-  if (!isWin){
+  if (!isWin) {
     var strHTML = '&#128552'
     var elLife = document.querySelector('.button')
     elLife.innerHTML = strHTML
@@ -87,4 +89,21 @@ function renderStart(isWin) {
     var elLife = document.querySelector('.button')
     elLife.innerHTML = strHTML
   }
+}
+
+function openEmptyNeighbors(i, j) {
+  for (var k = i - 1; k <= i + 1; k++) {
+    if (k < 0 || k > gSize - 1) continue // not outside board
+    for (var l = j - 1; l <= j + 1; l++) {
+      if (l < 0 || l > gSize - 1) continue // not outside board           
+      if (k === i && l === j) continue // not on currCel
+      if (!gBoard[k][l].isOpen && gBoard[k][l].in === EMPTY) {
+        gBoard[k][l].out = EMPTY
+        gBoard[k][l].isOpen = true
+        openEmptyNeighbors(k, l)
+        gOpenCells++
+      }
+    }
+  }
+  renderBoard(gBoard)
 }

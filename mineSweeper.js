@@ -54,35 +54,26 @@ function cellClicked(elCell, i, j, ev) { //Called when a cell (td) is clicked
         }
         else {
             gBoard[i][j].out = FLAG
-            renderBoard(gBoard)
             gFlagCount++
         }
+        renderBoard(gBoard)
     }
+    else if (gBoard[i][j].out === FLAG) return
     else if (gBoard[i][j].in === EMPTY) {
         gBoard[i][j].out = EMPTY
         gOpenCells++
-        for (var k = i - 1; k <= i + 1; k++) {
-            if (k < 0 || k > gSize - 1) continue // not outside board
-            for (var l = j - 1; l <= j + 1; l++) {
-                if (l < 0 || l > gSize - 1) continue // not outside board           
-                if (k === i && l === j) continue // not on currCel
-                if (gBoard[k][l].in === EMPTY) {
-                    gBoard[k][l].out = EMPTY
-                    gBoard[k][l].isOpen = true
-                    renderBoard(gBoard)
-                    gOpenCells++
-                }
-            }
-        }
+        renderBoard(gBoard)
+        openEmptyNeighbors(i, j)
     }
     else {
         gBoard[i][j].out = gBoard[i][j].in
         gBoard[i][j].isOpen = true
         renderBoard(gBoard)
         gOpenCells++
-        if (gBoard[i][j].out === MINE)
+        if (gBoard[i][j].out === MINE){
             gLife--
-        renderLife()
+            renderLife()
+        }            
     }
     checkGameOver()
 }
@@ -90,6 +81,13 @@ function cellClicked(elCell, i, j, ev) { //Called when a cell (td) is clicked
 function checkGameOver() { //Game ends when all mines are marked, and all the other cells are shown
     if ((gSize === 4 && gLife === 1) || (gLife === 0)) {
         renderStart(false)
+        //all mines should be revealed
+        for (var i = 0; i < gSize; i++) {
+            for (var j = 0; j < gSize; j++) {
+                if (gBoard[i][j].in === MINE) gBoard[i][j].out = MINE
+            }
+        }
+        renderBoard(gBoard)
         console.log('game over')
         clearInterval(gTimeInterval)
     }
