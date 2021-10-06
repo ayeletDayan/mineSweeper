@@ -4,17 +4,14 @@ var gMines
 var gBoard = []
 var gTimeInterval
 var gTime
-var gLife = 3
-var gHint = 3
-var gOpenCells = 0
-var gFlagCount = 0
-var isHint
 var gHintInterval
 var bestScore = {
     beginner: 0,
     medium: 0,
     expert: 0
 }
+var gHint = 3
+var isHint
 var gSafeClick = 3
 var gUndoArr = []
 
@@ -24,12 +21,11 @@ const FLAG = '&#128681'
 const LIFE = '&#128151'
 const HINT = '&#10067'
 
-
 var gGame = {
     isOn: false,
-    shownCount: 0,
-    markedCount: 0,
-    secsPassed: 0
+    openCells: 0,
+    flagCount: 0,
+    life: 3
 }
 
 function initGame() { //This is called when page loads
@@ -38,15 +34,15 @@ function initGame() { //This is called when page loads
     clearInterval(gTimeInterval)
     var elTime = document.querySelector('span')
     elTime.innerText = '00:00'
-    gLife = 3
+    gGame.life = 3
     gHint = 3
     gSafeClick = 3
-    gOpenCells = 0
-    gFlagCount = 0
+    gGame.openCells = 0
+    gGame.flagCount = 0
     var gUndoArr = []
     buildBoard()
     renderBoard(gBoard)
-    renderObject(gLife, LIFE, '.life')
+    renderObject(gGame.life, LIFE, '.life')
     renderObject(gHint, HINT, '.hint')
     document.querySelector('.safe-Click').innerHTML = '3 Safe Click'
 }
@@ -66,7 +62,7 @@ function cellClicked(elCell, i, j, ev) { //Called when a cell (td) is clicked
         gGame.isOn = true
         gBoard[i][j].out = FLAG
         gUndoArr.push({i: i,j: j, in: gBoard[i][j].in, out:  gBoard[i][j].out})        
-        gFlagCount++
+        gGame.flagCount++
     }
     if (!gGame.isOn && gBoard[i][j].in !== MINE) {
         startTime()
@@ -76,12 +72,12 @@ function cellClicked(elCell, i, j, ev) { //Called when a cell (td) is clicked
         if (gBoard[i][j].out === FLAG) {
             gBoard[i][j].out = ''
             gUndoArr.push({i: i,j: j, in: gBoard[i][j].in, out:  gBoard[i][j].out})
-            gFlagCount--
+            gGame.flagCount--
         }
         else {
             gBoard[i][j].out = FLAG
             gUndoArr.push({i: i,j: j, in: gBoard[i][j].in, out:  gBoard[i][j].out})
-            gFlagCount++
+            gGame.flagCount++
         }
         renderBoard(gBoard)
     }
@@ -89,6 +85,7 @@ function cellClicked(elCell, i, j, ev) { //Called when a cell (td) is clicked
     else if (gBoard[i][j].in === EMPTY) {
         gBoard[i][j].out = EMPTY
         gUndoArr.push({i: i,j: j, in: gBoard[i][j].in, out:  gBoard[i][j].out})
+        
         renderBoard(gBoard)
         openEmptyNeighbors(i, j)
     }
@@ -97,17 +94,17 @@ function cellClicked(elCell, i, j, ev) { //Called when a cell (td) is clicked
         gUndoArr.push({i: i,j: j, in: gBoard[i][j].in, out:  gBoard[i][j].out})
         gBoard[i][j].isOpen = true
         renderBoard(gBoard)
-        gOpenCells++
+        gGame.openCells++
         if (gBoard[i][j].out === MINE) {
-            gLife--
-            renderObject(gLife, LIFE, '.life')
+            gGame.life--
+            renderObject(gGame.life, LIFE, '.life')
         }
     }
     checkGameOver()    
 }
 
 function checkGameOver() { //Game ends when all mines are marked, and all the other cells are shown
-    if ((gSize === 4 && gLife === 1) || (gLife === 0)) {
+    if ((gSize === 4 && gGame.life === 1) || (gGame.life === 0)) {
         renderStart(false)
         //all mines should be revealed
         for (var i = 0; i < gSize; i++) {
@@ -119,7 +116,7 @@ function checkGameOver() { //Game ends when all mines are marked, and all the ot
         console.log('game over')
         clearInterval(gTimeInterval)
     }
-    else if ((gOpenCells + gFlagCount) === (gSize * gSize)) {
+    else if ((gGame.openCells + gGame.flagCount) === (gSize * gSize)) {
         renderStart(true)
         console.log('You Win!')
         clearInterval(gTimeInterval)

@@ -109,7 +109,7 @@ function openEmptyNeighbors(i, j) {
       if (!gBoard[k][l].isOpen && gBoard[k][l].in === EMPTY) {
         gBoard[k][l].out = EMPTY
         gBoard[k][l].isOpen = true
-        gOpenCells++
+        gGame.openCells++
         openEmptyNeighbors(k, l)
       }
     }
@@ -118,7 +118,7 @@ function openEmptyNeighbors(i, j) {
 }
 
 function hint() {
-  if (gHint === 0) return
+  if (gGame.hint === 0) return
   var elHint = document.querySelector('.hint')
   elHint.innerHTML = 'Hint'
   isHint = true
@@ -137,8 +137,8 @@ function showHint(colIdx, rowIdx) {
     }
   }
   isHint = false
-  gHint--
-  renderObject(gHint, HINT, '.hint')
+  gGame.hint--
+  renderObject(gGame.hint, HINT, '.hint')
   renderBoard(gBoard)
   setTimeout(function () {
     hideHint(hintCells)
@@ -179,10 +179,13 @@ function safeClick() {
 
 function undo() {
   // if game over and all the mines are showen, so it can cover then again but i think we should not alow it... i didn't finish all the condition for this issue
-  if ((gSize === 4 && gLife === 1) || (gLife === 0)) {
+  if ((gSize === 4 && gGame.life === 1) || (gGame.life === 0)) {
     for (var i = 0; i < gSize; i++) {
       for (var j = 0; j < gSize; j++) {
-        if (gBoard[i][j].in === MINE) gBoard[i][j].out = ''
+        if (gBoard[i][j].in === MINE) {
+          gBoard[i][j].out = ''
+          gGame.openCells--
+        }
       }
     }
   }
@@ -193,7 +196,7 @@ function undo() {
     closeEmptyNeighbors(gUndoArr[gUndoArr.length - 1].i, gUndoArr[gUndoArr.length - 1].j)
     renderBoard(gBoard)
     gUndoArr.pop(1)
-    gOpenCells--
+    gGame.openCells--
   }
 
   function closeEmptyNeighbors(i, j) {
@@ -205,7 +208,7 @@ function undo() {
         if (gBoard[k][l].out === EMPTY) {
           gBoard[k][l].out = ''
           gBoard[k][l].isOpen = false
-          gOpenCells--
+          gGame.openCells--
           closeEmptyNeighbors(k, l)
         }
       }
